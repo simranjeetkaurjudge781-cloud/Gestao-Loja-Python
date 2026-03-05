@@ -1,77 +1,79 @@
-# Gestão de Loja - Projeto Python
+def menu_principal():
+    # FASE 3: Dados estruturados por categoria
+    # Inicializamos a loja com os itens que você forneceu
+    inventario = [
+        # 🏠 Household
+        {"nome": "Sofa", "categoria": "Household", "preco": 250.00, "quantidade": 5},
+        {"nome": "Lamp", "categoria": "Household", "preco": 15.00, "quantidade": 20},
+        # 🍎 Fruits
+        {"nome": "Apple", "categoria": "Fruits", "preco": 0.50, "quantidade": 100},
+        {"nome": "Watermelon", "categoria": "Fruits", "preco": 3.00, "quantidade": 10},
+        # 🍔 Foods
+        {"nome": "Rice", "categoria": "Foods", "preco": 1.20, "quantidade": 50},
+        {"nome": "Pasta", "categoria": "Foods", "preco": 0.90, "quantidade": 40},
+        # 🛁 Bathing
+        {"nome": "Soap", "categoria": "Bathing", "preco": 1.10, "quantidade": 80},
+        {"nome": "Shampoo", "categoria": "Bathing", "preco": 4.50, "quantidade": 30},
+        # 🧹 Cleaning
+        {"nome": "Detergent", "categoria": "Cleaning", "preco": 2.80, "quantidade": 25},
+        {"nome": "Broom", "categoria": "Cleaning", "preco": 5.00, "quantidade": 12}
+    ]
 
-# FASE 3: Funções Obrigatórias (Uso de 'def')
-def mostrar_estatisticas(inventario):
-    """FASE 4: Funcionalidade Extra - Estatísticas"""
-    if not inventario:
-        print("\nInventário vazio. Sem estatísticas.")
-        return
-    
-    total_itens = sum(item['quantidade'] for item in inventario)
-    valor_total = sum(item['preco'] * item['quantidade'] for item in inventario)
-    print(f"\n--- ESTATÍSTICAS ---")
-    print(f"Total de produtos diferentes: {len(inventario)}")
-    print(f"Quantidade total em stock: {total_itens}")
-    print(f"Valor total do inventário: {valor_total:.2f}€")
-
-def procurar_produto(inventario, nome_procura):
-    for item in inventario:
-        if item['nome'].lower() == nome_procura.lower():
-            return item
-    return None
-
-# FASE 2: Estrutura Base
-def menu():
-    loja = [] # FASE 3: Lista de Dicionários
-    
-    while True: # FASE 2: Ciclo While
-        print("\n=== GESTÃO DE LOJA ===")
-        print("1 – Adicionar Produto")
-        print("2 – Listar Todos")
-        print("3 – Procurar Produto")
-        print("4 – Remover Produto")
-        print("5 – Ver Estatísticas (Extra)")
+    while True:
+        print("\n" + "="*30)
+        print("     GESTÃO DE LOJA V1.0")
+        print("="*30)
+        print("1 – Adicionar")
+        print("2 – Listar")
+        print("3 – Procurar")
+        print("4 – Remover")
         print("0 – Sair")
         
-        opcao = input("Escolha uma opção: ")
+        opcao = input("\nSelecione uma opção: ")
 
         if opcao == "1":
-            nome = input("Nome do produto: ")
+            print("\n--- ADICIONAR NOVO ITEM ---")
+            nome = input("Nome do item: ")
+            cat = input("Categoria (ex: Foods, Cleaning): ")
             preco = float(input("Preço: "))
             qtd = int(input("Quantidade: "))
-            loja.append({"nome": nome, "preco": preco, "quantidade": qtd})
-            print("Produto adicionado com sucesso!")
+            inventario.append({"nome": nome, "categoria": cat, "preco": preco, "quantidade": qtd})
+            print(f"✅ {nome} adicionado com sucesso!")
 
         elif opcao == "2":
-            print("\n--- LISTA DE PRODUTOS ---")
-            for i, item in enumerate(loja):
-                print(f"{i}. {item['nome']} | Preço: {item['preco']}€ | Qtd: {item['quantidade']}")
+            print("\n--- 📦 INVENTÁRIO COMPLETO ---")
+            print(f"{'Produto':<15} | {'Categoria':<12} | {'Preço':<8} | {'Qtd'}")
+            print("-" * 50)
+            for p in inventario:
+                print(f"{p['nome']:<15} | {p['categoria']:<12} | {p['preco']:>6.2f}€ | {p['quantidade']}")
 
         elif opcao == "3":
-            nome_busca = input("Nome do produto a procurar: ")
-            resultado = procurar_produto(loja, nome_busca)
-            if resultado:
-                print(f"Encontrado: {resultado['nome']} - Stock: {resultado['quantidade']}")
-            else:
-                print("Produto não encontrado.")
+            print("\n--- 🔍 PROCURAR ---")
+            busca = input("O que deseja procurar? ").lower()
+            encontrado = False
+            for p in inventario:
+                if busca in p['nome'].lower() or busca in p['categoria'].lower():
+                    print(f"📍 {p['nome']} ({p['categoria']}) - Stock: {p['quantidade']}")
+                    encontrado = True
+            if not encontrado:
+                print("❌ Item não encontrado.")
 
         elif opcao == "4":
-            nome_remov = input("Nome do produto a remover: ")
-            produto = procurar_produto(loja, nome_remov)
-            if produto:
-                loja.remove(produto)
-                print("Produto removido!")
+            print("\n--- 🗑️ REMOVER ---")
+            remover = input("Nome do item para remover: ").lower()
+            for p in inventario:
+                if p['nome'].lower() == remover:
+                    inventario.remove(p)
+                    print(f"✅ {p['nome']} removido!")
+                    break
             else:
-                print("Produto não encontrado.")
-
-        elif opcao == "5":
-            mostrar_estatisticas(loja)
+                print("❌ Produto não encontrado.")
 
         elif opcao == "0":
-            print("A encerrar o programa...")
-            break # FASE 2: Opção sair
+            print("Encerrando... Volte sempre!")
+            break
         else:
-            print("Opção inválida!")
+            print("⚠️ Opção Inválida.")
 
 if __name__ == "__main__":
-    menu()
+    menu_principal()
